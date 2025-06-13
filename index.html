@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signal Master Mind Pro - Trading Signals Platform</title>
+    <title>Trading Signals Pro - Real-Time Market Signals</title>
     <style>
         * {
             margin: 0;
@@ -12,558 +12,638 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0c1622 0%, #1a2332 100%);
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
             color: #ffffff;
             min-height: 100vh;
         }
 
         .header {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.8);
             padding: 1rem 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #00ff88;
         }
 
-        .header h1 {
-            color: #00d4ff;
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .telegram-link {
-            display: inline-block;
-            background: linear-gradient(45deg, #0088cc, #00aaff);
-            color: white;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            border-radius: 25px;
+        .logo {
+            font-size: 1.8rem;
             font-weight: bold;
-            transition: transform 0.3s;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
         }
 
-        .telegram-link:hover {
-            transform: scale(1.05);
+        .live-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .warning {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            padding: 1rem;
-            margin: 1rem 2rem;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: #00ff88;
+            border-radius: 50%;
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+            50% { opacity: 0.5; }
         }
 
-        .container {
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            padding: 2rem;
             max-width: 1400px;
             margin: 0 auto;
-            padding: 2rem;
         }
 
-        .control-panel {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .section {
+        .trading-panel {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 1.5rem;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .section h3 {
-            color: #00d4ff;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .btn {
-            padding: 0.7rem 1.2rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-        }
-
-        .btn.active {
-            background: linear-gradient(45deg, #00d4ff, #0099cc);
-            transform: scale(1.1);
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
-        }
-
-        .btn.live-signal {
-            background: linear-gradient(45deg, #4CAF50, #45a049);
-        }
-
-        .btn.future-signal {
-            background: linear-gradient(45deg, #ff9800, #f57c00);
-        }
-
         .market-selector {
+            margin-bottom: 2rem;
+        }
+
+        .market-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.5rem;
-            margin-bottom: 1rem;
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        .signals-display {
+        .market-btn {
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            border: none;
+            padding: 1rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .market-btn:hover, .market-btn.active {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+
+        .timeframe-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .timeframe-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeframe-btn:hover, .timeframe-btn.active {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+
+        .signal-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .signal-count-btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a5a);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .signal-count-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .generate-btn {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 2rem;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+        }
+
+        .signals-container {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             padding: 1.5rem;
-            margin-top: 2rem;
-            min-height: 400px;
+            max-height: 400px;
+            overflow-y: auto;
         }
 
-        .signal-card {
+        .signal-item {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            border-radius: 8px;
             padding: 1rem;
             margin-bottom: 1rem;
-            border-left: 4px solid #00d4ff;
-            transition: transform 0.3s;
+            border-left: 4px solid #00ff88;
+            position: relative;
         }
 
-        .signal-card:hover {
-            transform: translateX(5px);
+        .signal-item.sell {
+            border-left-color: #ff6b6b;
         }
 
         .signal-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 0.5rem;
         }
 
         .signal-pair {
             font-weight: bold;
-            color: #00d4ff;
             font-size: 1.1rem;
-        }
-
-        .signal-time {
-            color: #ffeb3b;
-            font-size: 0.9rem;
         }
 
         .signal-direction {
-            font-size: 1.2rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
             font-weight: bold;
-            margin: 0.5rem 0;
         }
 
-        .signal-up {
-            color: #4CAF50;
+        .signal-direction.buy {
+            background: #00ff88;
+            color: #000;
         }
 
-        .signal-down {
-            color: #f44336;
+        .signal-direction.sell {
+            background: #ff6b6b;
+            color: #fff;
+        }
+
+        .signal-details {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            color: #00ff88;
+            margin-bottom: 1rem;
+            text-align: center;
         }
 
         .money-management {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-top: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .management-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
+        .balance-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
             background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .risk-settings {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .risk-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
             border-radius: 8px;
         }
 
-        .status-indicator {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: bold;
+        .live-signals {
+            margin-top: 2rem;
         }
 
-        .status-connected {
-            background: #4CAF50;
-            color: white;
+        .live-signal-item {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            animation: glow 2s infinite alternate;
         }
 
-        .status-disconnected {
-            background: #f44336;
-            color: white;
+        @keyframes glow {
+            from { box-shadow: 0 0 5px #ffd700; }
+            to { box-shadow: 0 0 20px #ffd700; }
         }
 
-        .generate-btn {
-            background: linear-gradient(45deg, #ff6b35, #f7931e);
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 1rem;
-            transition: transform 0.3s;
-        }
-
-        .generate-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .timeframe-selector {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+        .current-time {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #00ff88;
             margin-bottom: 1rem;
         }
 
-        .loading {
-            display: none;
-            text-align: center;
-            color: #00d4ff;
-            margin: 2rem 0;
+        .toggle-btn {
+            background: linear-gradient(45deg, #9b59b6, #8e44ad);
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            width: 100%;
         }
 
-        .spinner {
-            border: 3px solid rgba(0, 212, 255, 0.3);
-            border-radius: 50%;
-            border-top: 3px solid #00d4ff;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+        .scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        .scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
         }
 
-        @media (max-width: 768px) {
-            .control-panel {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .header {
-                padding: 1rem;
-            }
+        .scrollbar::-webkit-scrollbar-thumb {
+            background: #00ff88;
+            border-radius: 3px;
         }
     </style>
 </head>
 <body>
-    <div class="status-indicator" id="apiStatus">
-        <span id="statusText">🟢 API Connected</span>
-    </div>
-
     <div class="header">
-        <h1>Signal Master Mind Pro</h1>
-        <p>Professional Trading Signals Platform</p>
-        <a href="https://t.me/signalmastermindpro" class="telegram-link" target="_blank">
-            📱 Join Our Telegram Channel
-        </a>
+        <div class="logo">📈 Trading Signals Pro</div>
+        <div class="live-status">
+            <div class="status-dot"></div>
+            <span>Live Market Connection</span>
+        </div>
     </div>
 
-    <div class="warning">
-        ⚠️ WARNING: Trading involves significant risk. No trading system is 100% accurate. Use proper risk management.
-    </div>
-
-    <div class="container">
-        <div class="control-panel">
-            <!-- Signal Type Selection -->
-            <div class="section">
-                <h3>Signal Type</h3>
-                <div class="button-group">
-                    <button class="btn live-signal" onclick="setSignalType('live')">Live Signals</button>
-                    <button class="btn future-signal active" onclick="setSignalType('future')">Future Signals</button>
+    <div class="main-container">
+        <div class="trading-panel">
+            <div class="current-time" id="currentTime"></div>
+            
+            <div class="market-selector">
+                <h3>Select Market Pair</h3>
+                <div class="market-grid">
+                    <button class="market-btn active" data-pair="EUR/USD">EUR/USD</button>
+                    <button class="market-btn" data-pair="GBP/USD">GBP/USD</button>
+                    <button class="market-btn" data-pair="USD/JPY">USD/JPY</button>
+                    <button class="market-btn" data-pair="AUD/USD">AUD/USD</button>
+                    <button class="market-btn" data-pair="USD/CAD">USD/CAD</button>
+                    <button class="market-btn" data-pair="NZD/USD">NZD/USD</button>
+                    <button class="market-btn" data-pair="EUR/GBP">EUR/GBP</button>
+                    <button class="market-btn" data-pair="GBP/JPY">GBP/JPY</button>
                 </div>
             </div>
 
-            <!-- Market Selection -->
-            <div class="section">
-                <h3>Select Market</h3>
-                <div class="market-selector">
-                    <button class="btn" onclick="selectMarket('EURUSD')">EUR/USD</button>
-                    <button class="btn" onclick="selectMarket('GBPUSD')">GBP/USD</button>
-                    <button class="btn" onclick="selectMarket('USDJPY')">USD/JPY</button>
-                    <button class="btn" onclick="selectMarket('AUDUSD')">AUD/USD</button>
-                    <button class="btn" onclick="selectMarket('USDCAD')">USD/CAD</button>
-                    <button class="btn" onclick="selectMarket('NZDUSD')">NZD/USD</button>
-                    <button class="btn" onclick="selectMarket('EURGBP')">EUR/GBP</button>
-                    <button class="btn" onclick="selectMarket('EURJPY')">EUR/JPY</button>
-                </div>
+            <div class="timeframe-selector">
+                <button class="timeframe-btn active" data-timeframe="1">1 Min</button>
+                <button class="timeframe-btn" data-timeframe="2">2 Min</button>
+                <button class="timeframe-btn" data-timeframe="3">3 Min</button>
+                <button class="timeframe-btn" data-timeframe="5">5 Min</button>
+                <button class="timeframe-btn" data-timeframe="15">15 Min</button>
+                <button class="timeframe-btn" data-timeframe="30">30 Min</button>
+                <button class="timeframe-btn" data-timeframe="60">1 Hour</button>
             </div>
 
-            <!-- Timeframe Selection -->
-            <div class="section">
-                <h3>Select Timeframe</h3>
-                <div class="timeframe-selector">
-                    <button class="btn" onclick="setTimeframe('1m')">1 Minute</button>
-                    <button class="btn" onclick="setTimeframe('2m')">2 Minutes</button>
-                    <button class="btn" onclick="setTimeframe('3m')">3 Minutes</button>
-                    <button class="btn" onclick="setTimeframe('5m')">5 Minutes</button>
-                    <button class="btn" onclick="setTimeframe('15m')">15 Minutes</button>
-                    <button class="btn" onclick="setTimeframe('30m')">30 Minutes</button>
-                    <button class="btn" onclick="setTimeframe('1h')">1 Hour</button>
-                </div>
+            <div class="signal-controls">
+                <button class="signal-count-btn" data-count="10">Generate 10</button>
+                <button class="signal-count-btn" data-count="20">Generate 20</button>
+                <button class="signal-count-btn" data-count="30">Generate 30</button>
+                <button class="signal-count-btn" data-count="50">Generate 50</button>
             </div>
 
-            <!-- Signal Quantity -->
-            <div class="section">
-                <h3>Number of Signals</h3>
-                <div class="button-group">
-                    <button class="btn" onclick="setSignalCount(10)">10 Signals</button>
-                    <button class="btn" onclick="setSignalCount(20)">20 Signals</button>
-                    <button class="btn" onclick="setSignalCount(30)">30 Signals</button>
-                    <button class="btn" onclick="setSignalCount(40)">40 Signals</button>
-                    <button class="btn" onclick="setSignalCount(50)">50 Signals</button>
+            <button class="generate-btn" onclick="generateSignals()">🚀 Generate Future Signals</button>
+
+            <div class="signals-container scrollbar" id="signalsContainer">
+                <div style="text-align: center; opacity: 0.7; padding: 2rem;">
+                    Click "Generate Future Signals" to start receiving trading signals
                 </div>
             </div>
         </div>
 
-        <button class="generate-btn" onclick="generateSignals()">
-            🚀 Generate Trading Signals
-        </button>
-
-        <div class="loading" id="loadingIndicator">
-            <div class="spinner"></div>
-            <p>Analyzing market data and generating signals...</p>
-        </div>
-
-        <div class="signals-display" id="signalsDisplay">
-            <h3>📊 Trading Signals</h3>
-            <p>Select your preferences and click "Generate Trading Signals" to get started.</p>
-        </div>
-
-        <!-- Money Management Section -->
-        <div class="money-management">
-            <h3>💰 Money Management Calculator</h3>
-            <div class="section">
-                <label for="accountBalance">Account Balance ($):</label>
-                <input type="number" id="accountBalance" value="100" min="50" max="10000" 
-                       style="padding: 0.5rem; margin: 0.5rem 0; border-radius: 5px; border: none; background: rgba(255,255,255,0.1); color: white;">
+        <div class="sidebar">
+            <h3>💰 Money Management</h3>
+            <div class="money-management">
+                <input type="number" class="balance-input" placeholder="Enter Account Balance ($)" id="accountBalance" value="1000">
                 
-                <div id="moneyManagement">
-                    <!-- Money management calculations will appear here -->
+                <div class="risk-settings">
+                    <div class="risk-item">
+                        <strong>Risk per Trade:</strong>
+                        <div id="riskAmount">$20 (2%)</div>
+                    </div>
+                    <div class="risk-item">
+                        <strong>Max Daily Loss:</strong>
+                        <div id="maxLoss">$100 (10%)</div>
+                    </div>
+                    <div class="risk-item">
+                        <strong>Profit Target:</strong>
+                        <div id="profitTarget">$200 (20%)</div>
+                    </div>
                 </div>
+            </div>
+
+            <button class="toggle-btn" onclick="toggleLiveSignals()">📡 Toggle Live Signals</button>
+            
+            <div class="live-signals" id="liveSignalsContainer" style="display: none;">
+                <h3>🔴 Live Signals</h3>
+                <div id="liveSignalsList"></div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(255, 193, 7, 0.1); border-radius: 8px; border: 1px solid #ffc107;">
+                <h4 style="color: #ffc107; margin-bottom: 0.5rem;">⚠️ Risk Disclaimer</h4>
+                <p style="font-size: 0.8rem; opacity: 0.9;">
+                    Trading involves substantial risk. Past performance does not guarantee future results. 
+                    Only trade with money you can afford to lose.
+                </p>
             </div>
         </div>
     </div>
 
     <script>
-        // Global variables
-        let currentSignalType = 'future';
-        let selectedMarket = 'EURUSD';
-        let selectedTimeframe = '5m';
+        let selectedPair = 'EUR/USD';
+        let selectedTimeframe = 1;
         let signalCount = 10;
-        let isApiConnected = true;
+        let liveSignalsActive = false;
+        let signalsData = [];
 
-        // Market data simulation (In real implementation, this would connect to actual APIs)
-        const marketPairs = ['EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'USDCAD', 'NZDUSD', 'EURGBP', 'EURJPY'];
-        
-        // Simulate API connection status
-        function updateApiStatus() {
-            const statusElement = document.getElementById('statusText');
-            if (isApiConnected) {
-                statusElement.textContent = '🟢 API Connected';
-                statusElement.className = 'status-connected';
-            } else {
-                statusElement.textContent = '🔴 API Disconnected';
-                statusElement.className = 'status-disconnected';
-            }
-        }
-
-        function setSignalType(type) {
-            currentSignalType = type;
-            document.querySelectorAll('.btn.live-signal, .btn.future-signal').forEach(btn => {
-                btn.classList.remove('active');
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
             });
-            
-            if (type === 'live') {
-                document.querySelector('.btn.live-signal').classList.add('active');
-            } else {
-                document.querySelector('.btn.future-signal').classList.add('active');
-            }
+            document.getElementById('currentTime').textContent = timeString;
         }
 
-        function selectMarket(market) {
-            selectedMarket = market;
-            document.querySelectorAll('.market-selector .btn').forEach(btn => {
-                btn.classList.remove('active');
+        // Market pair selection
+        document.querySelectorAll('.market-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.market-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedPair = this.dataset.pair;
             });
-            event.target.classList.add('active');
-        }
+        });
 
-        function setTimeframe(timeframe) {
-            selectedTimeframe = timeframe;
-            document.querySelectorAll('.timeframe-selector .btn').forEach(btn => {
-                btn.classList.remove('active');
+        // Timeframe selection
+        document.querySelectorAll('.timeframe-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.timeframe-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedTimeframe = parseInt(this.dataset.timeframe);
             });
-            event.target.classList.add('active');
-        }
+        });
 
-        function setSignalCount(count) {
-            signalCount = count;
-            document.querySelectorAll('.section:last-child .btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.classList.add('active');
-        }
-
-        function generateSignals() {
-            const loadingIndicator = document.getElementById('loadingIndicator');
-            const signalsDisplay = document.getElementById('signalsDisplay');
-            
-            // Show loading
-            loadingIndicator.style.display = 'block';
-            signalsDisplay.innerHTML = '<h3>📊 Generating Signals...</h3>';
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                loadingIndicator.style.display = 'none';
-                displaySignals();
-                updateMoneyManagement();
-            }, 2000);
-        }
-
-        function displaySignals() {
-            const signalsDisplay = document.getElementById('signalsDisplay');
-            const currentTime = new Date();
-            
-            let signalsHtml = `<h3>📊 ${currentSignalType.toUpperCase()} Trading Signals - ${selectedMarket}</h3>`;
-            signalsHtml += `<p><strong>Timeframe:</strong> ${selectedTimeframe} | <strong>Generated:</strong> ${currentTime.toLocaleString()}</p>`;
-            
-            for (let i = 0; i < signalCount; i++) {
-                const signalTime = new Date(currentTime.getTime() + (i + 1) * getTimeframeMinutes() * 60000);
-                const direction = Math.random() > 0.5 ? 'UP' : 'DOWN';
-                const confidence = Math.floor(Math.random() * 20) + 75; // 75-95% confidence
-                
-                signalsHtml += `
-                    <div class="signal-card">
-                        <div class="signal-header">
-                            <span class="signal-pair">${selectedMarket}</span>
-                            <span class="signal-time">${signalTime.toLocaleTimeString()} - ${signalTime.toLocaleDateString()}</span>
-                        </div>
-                        <div class="signal-direction ${direction === 'UP' ? 'signal-up' : 'signal-down'}">
-                            ${direction === 'UP' ? '📈 BUY' : '📉 SELL'} Signal
-                        </div>
-                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
-                            <span>Confidence: ${confidence}%</span>
-                            <span>Timeframe: ${selectedTimeframe}</span>
-                            <button onclick="copySignal('${selectedMarket}', '${direction}', '${signalTime.toLocaleString()}')" 
-                                    style="background: #00d4ff; color: white; border: none; padding: 0.3rem 0.8rem; border-radius: 5px; cursor: pointer;">
-                                📋 Copy
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            signalsDisplay.innerHTML = signalsHtml;
-        }
-
-        function getTimeframeMinutes() {
-            const timeframes = {
-                '1m': 1, '2m': 2, '3m': 3, '5m': 5, 
-                '15m': 15, '30m': 30, '1h': 60
-            };
-            return timeframes[selectedTimeframe] || 5;
-        }
-
-        function copySignal(pair, direction, time) {
-            const signalText = `${pair} - ${direction} Signal\nTime: ${time}\nTimeframe: ${selectedTimeframe}`;
-            navigator.clipboard.writeText(signalText).then(() => {
-                alert('Signal copied to clipboard!');
-            });
-        }
-
-        function updateMoneyManagement() {
-            const balance = document.getElementById('accountBalance').value;
-            const managementDiv = document.getElementById('moneyManagement');
-            
-            const riskLevels = [
-                { risk: '1%', amount: balance * 0.01, stopLoss: balance * 0.005, takeProfit: balance * 0.02 },
-                { risk: '2%', amount: balance * 0.02, stopLoss: balance * 0.01, takeProfit: balance * 0.04 },
-                { risk: '3%', amount: balance * 0.03, stopLoss: balance * 0.015, takeProfit: balance * 0.06 },
-                { risk: '5%', amount: balance * 0.05, stopLoss: balance * 0.025, takeProfit: balance * 0.10 }
-            ];
-            
-            let managementHtml = '<h4>Recommended Position Sizes:</h4>';
-            
-            riskLevels.forEach(level => {
-                managementHtml += `
-                    <div class="management-row">
-                        <div><strong>Risk Level:</strong> ${level.risk}</div>
-                        <div><strong>Position Size:</strong> $${level.amount.toFixed(2)}</div>
-                        <div><strong>Stop Loss:</strong> $${level.stopLoss.toFixed(2)}</div>
-                        <div><strong>Take Profit:</strong> $${level.takeProfit.toFixed(2)}</div>
-                    </div>
-                `;
-            });
-            
-            managementDiv.innerHTML = managementHtml;
-        }
-
-        // Auto-refresh live signals every minute when live mode is active
-        setInterval(() => {
-            if (currentSignalType === 'live' && document.getElementById('signalsDisplay').innerHTML.includes('LIVE Trading Signals')) {
+        // Signal count selection
+        document.querySelectorAll('.signal-count-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                signalCount = parseInt(this.dataset.count);
                 generateSignals();
+            });
+        });
+
+        // Generate signals function
+        function generateSignals() {
+            const container = document.getElementById('signalsContainer');
+            container.innerHTML = '';
+            signalsData = [];
+
+            for (let i = 0; i < signalCount; i++) {
+                const signal = generateRandomSignal(i);
+                signalsData.push(signal);
+                container.appendChild(createSignalElement(signal));
             }
-        }, 60000);
+        }
+
+        function generateRandomSignal(index) {
+            const now = new Date();
+            const futureTime = new Date(now.getTime() + (index + 1) * selectedTimeframe * 60 * 1000);
+            const direction = Math.random() > 0.5 ? 'BUY' : 'SELL';
+            const currentPrice = (1.0500 + Math.random() * 0.1).toFixed(5);
+            const targetPrice = direction === 'BUY' 
+                ? (parseFloat(currentPrice) + Math.random() * 0.01).toFixed(5)
+                : (parseFloat(currentPrice) - Math.random() * 0.01).toFixed(5);
+
+            return {
+                id: index + 1,
+                pair: selectedPair,
+                direction: direction,
+                currentPrice: currentPrice,
+                targetPrice: targetPrice,
+                entryTime: futureTime,
+                timeframe: selectedTimeframe,
+                confidence: Math.floor(Math.random() * 30) + 70
+            };
+        }
+
+        function createSignalElement(signal) {
+            const div = document.createElement('div');
+            div.className = `signal-item ${signal.direction.toLowerCase()}`;
+            
+            div.innerHTML = `
+                <button class="copy-btn" onclick="copySignal(${signal.id})">📋</button>
+                <div class="signal-header">
+                    <span class="signal-pair">${signal.pair}</span>
+                    <span class="signal-direction ${signal.direction.toLowerCase()}">${signal.direction}</span>
+                </div>
+                <div class="signal-details">
+                    <div><strong>Entry Time:</strong> ${signal.entryTime.toLocaleTimeString()} (${signal.entryTime.toLocaleDateString()})</div>
+                    <div><strong>Current Price:</strong> ${signal.currentPrice}</div>
+                    <div><strong>Target Price:</strong> ${signal.targetPrice}</div>
+                    <div><strong>Timeframe:</strong> ${signal.timeframe} min</div>
+                    <div><strong>Confidence:</strong> ${signal.confidence}%</div>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        function copySignal(signalId) {
+            const signal = signalsData.find(s => s.id === signalId);
+            if (signal) {
+                const text = `${signal.pair} ${signal.direction} Signal
+Entry Time: ${signal.entryTime.toLocaleString()}
+Current Price: ${signal.currentPrice}
+Target Price: ${signal.targetPrice}
+Timeframe: ${signal.timeframe} minutes
+Confidence: ${signal.confidence}%`;
+                
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Signal copied to clipboard!');
+                });
+            }
+        }
+
+        // Money management updates
+        document.getElementById('accountBalance').addEventListener('input', function() {
+            const balance = parseFloat(this.value) || 1000;
+            document.getElementById('riskAmount').textContent = `$${(balance * 0.02).toFixed(2)} (2%)`;
+            document.getElementById('maxLoss').textContent = `$${(balance * 0.10).toFixed(2)} (10%)`;
+            document.getElementById('profitTarget').textContent = `$${(balance * 0.20).toFixed(2)} (20%)`;
+        });
+
+        // Live signals toggle
+        function toggleLiveSignals() {
+            liveSignalsActive = !liveSignalsActive;
+            const container = document.getElementById('liveSignalsContainer');
+            
+            if (liveSignalsActive) {
+                container.style.display = 'block';
+                startLiveSignals();
+            } else {
+                container.style.display = 'none';
+                stopLiveSignals();
+            }
+        }
+
+        let liveSignalInterval;
+
+        function startLiveSignals() {
+            liveSignalInterval = setInterval(() => {
+                if (Math.random() > 0.7) { // 30% chance every 10 seconds
+                    generateLiveSignal();
+                }
+            }, 10000);
+        }
+
+        function stopLiveSignals() {
+            if (liveSignalInterval) {
+                clearInterval(liveSignalInterval);
+            }
+        }
+
+        function generateLiveSignal() {
+            const pairs = ['EUR/USD', 'GBP/USD', 'USD/JPY', 'AUD/USD'];
+            const pair = pairs[Math.floor(Math.random() * pairs.length)];
+            const direction = Math.random() > 0.5 ? 'BUY' : 'SELL';
+            const now = new Date();
+            
+            const liveSignal = {
+                pair: pair,
+                direction: direction,
+                time: now,
+                price: (1.0500 + Math.random() * 0.1).toFixed(5)
+            };
+            
+            addLiveSignalToDOM(liveSignal);
+        }
+
+        function addLiveSignalToDOM(signal) {
+            const container = document.getElementById('liveSignalsList');
+            const div = document.createElement('div');
+            div.className = 'live-signal-item';
+            
+            div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${signal.pair}</strong>
+                        <span class="signal-direction ${signal.direction.toLowerCase()}">${signal.direction}</span>
+                    </div>
+                    <div style="text-align: right; font-size: 0.8rem;">
+                        <div>${signal.time.toLocaleTimeString()}</div>
+                        <div>${signal.price}</div>
+                    </div>
+                </div>
+            `;
+            
+            container.insertBefore(div, container.firstChild);
+            
+            // Remove old signals (keep only 5)
+            while (container.children.length > 5) {
+                container.removeChild(container.lastChild);
+            }
+        }
 
         // Initialize
-        updateApiStatus();
-        updateMoneyManagement();
-        
-        // Update money management when balance changes
-        document.getElementById('accountBalance').addEventListener('input', updateMoneyManagement);
+        updateTime();
+        setInterval(updateTime, 1000);
 
-        // Simulate occasional API disconnection/reconnection
+        // Simulate API connection status
+        let connectionStatus = true;
         setInterval(() => {
-            if (Math.random() < 0.05) { // 5% chance every 10 seconds
-                isApiConnected = !isApiConnected;
-                updateApiStatus();
-                setTimeout(() => {
-                    isApiConnected = true;
-                    updateApiStatus();
-                }, 3000);
+            // Randomly simulate connection issues (rare)
+            if (Math.random() > 0.99) {
+                connectionStatus = !connectionStatus;
+                const statusElement = document.querySelector('.live-status span');
+                const dotElement = document.querySelector('.status-dot');
+                
+                if (connectionStatus) {
+                    statusElement.textContent = 'Live Market Connection';
+                    dotElement.style.background = '#00ff88';
+                } else {
+                    statusElement.textContent = 'Reconnecting...';
+                    dotElement.style.background = '#ff6b6b';
+                    
+                    // Auto-reconnect after 3 seconds
+                    setTimeout(() => {
+                        connectionStatus = true;
+                        statusElement.textContent = 'Live Market Connection';
+                        dotElement.style.background = '#00ff88';
+                    }, 3000);
+                }
             }
-        }, 10000);
-
-        console.log('Trading Signals Platform Initialized');
-        console.log('Ready for market analysis and signal generation');
+        }, 5000);
     </script>
 </body>
 </html>
